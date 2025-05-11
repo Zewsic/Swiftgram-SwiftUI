@@ -9,12 +9,23 @@ import SwiftUI
 import Foundation
 
 struct NewSGProView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @State var enableFormattingPanel: Bool { didSet {
+        
+    }}
+    @State var pinnedNotificationsMode: Int { didSet {
+        
+    }}
+    @State var mentionNotificationsMode: Int { didSet {
+        
+    }}
     
-    private var adaptiveBackground: Color {
-        Color(colorScheme == .dark
-              ? UIColor.systemBackground
-              : UIColor.secondarySystemBackground)
+    @State var showBadgeSettings: Bool = false
+    
+    
+    init() {
+        self._enableFormattingPanel = State(initialValue: true)
+        self._pinnedNotificationsMode = State(initialValue: 0)
+        self._mentionNotificationsMode = State(initialValue: 0)
     }
     
     var body: some View {
@@ -43,21 +54,43 @@ struct NewSGProView: View {
                                     color: .red)
                     }
                     
-                    Toggle(isOn: Binding(get: {true}, set: {_ in})) {
-                        SettingsRow(title: "Панель форматирования",
+                    Toggle(isOn: $enableFormattingPanel) {
+                        SettingsRow(title: "Формат-панель",
                                     systemName: "textformat",
                                     color: .blue)
                     }
                 }
                 
                 Section(header: Text("Уведомления")) {
-                    NavigationLink(destination: Text("Закрепленные сообщения")) {
+                    NavigationLink(destination: SettingsSelectorScreen(
+                        title: "Закрепленные сообщения",
+                        options: ["По умолчанию", "Без звука", "Отключить"],
+                        descriptions: [
+                            "Вы будете получать уведомления о закрепленных сообщениях.",
+                            "Вы не будете получать уведомления о закрепленных сообщениях.",
+                            "Полное игнорирование закрепления сообщений."
+                        ],
+                        allowNilSelection: false,
+                        selectedIndex: pinnedNotificationsMode,
+                        onSelect: {index in pinnedNotificationsMode = index!})
+                    ) {
                         SettingsRow(title: "Закрепленные сообщения",
                                     systemName: "pin.slash.fill",
                                     color: .orange)
                     }
                     
-                    NavigationLink(destination: Text("Mentions and replies")) {
+                    NavigationLink(destination: SettingsSelectorScreen(
+                        title: "Упоминания и ответы",
+                        options: ["По умолчанию", "Без звука", "Отключить"],
+                        descriptions: [
+                            "Вы будете получать уведомления, когда вас упоминают, или отвечают на ваши сообщения.",
+                            "Вы не будете получать уведомления, когда вас упоминают, или отвечают на ваши сообщения.",
+                            "Полное игнорирование ответов и упоминаний."
+                        ],
+                        allowNilSelection: false,
+                        selectedIndex: pinnedNotificationsMode,
+                        onSelect: {index in pinnedNotificationsMode = index!})
+                    ) {
                         SettingsRow(title: "Упоминания и ответы",
                                     systemName: "at",
                                     color: .purple,
@@ -71,24 +104,20 @@ struct NewSGProView: View {
                                     imageName: "AppIcon")
                     }
                     
-                    NavigationLink(destination: Text("App Badges")) {
+                    NavigationLink {
+                        if #available(iOS 14.0, *) {
+                            BadgeSettingsView()
+                        } else {
+                            // Fallback on earlier versions
+                        }
+                    } label: {
                         SettingsRow(title: "Бэйдж приложения",
                                     imageName: "AppBadge")
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }
-    }
-    
-    private func settingsRow(title: String,
-                             systemName: String,
-                             color: Color) -> some View {
-        HStack(spacing: 15) {
-            SettingsIcon(systemName: systemName,
-                         background: color)
-            Text(title)
-        }
-        
     }
 }
 
@@ -98,12 +127,5 @@ struct NewSGProView: View {
         NewSGProView()
             .navigationBarTitle(Text(" ."), displayMode: .inline)
     }
-//    NavigationView {
-//        NavigationLink {
-//            NewSettingsView()
-//        } label: {
-//            Text("Swiftgram")
-//        }
-//    }
 }
     

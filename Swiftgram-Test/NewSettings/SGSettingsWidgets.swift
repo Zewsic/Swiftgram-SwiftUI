@@ -111,6 +111,7 @@ struct SettingsScreen: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 60, height: 60)
+                                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                                     .background(
                                         RoundedRectangle(cornerRadius: 14, style: .continuous)
                                     )
@@ -159,9 +160,8 @@ struct SettingsRow: View {
                 SettingsImageIcon(name: imageName!)
             }
             Text(title)
-            
+            Spacer()
             if selectedValue != nil {
-                Spacer()
                 Text(selectedValue!)
                     .foregroundColor(.gray)
             }
@@ -253,4 +253,76 @@ extension Color {
     static let skyBreeze = Color(hue: 0.58, saturation: 0.4, brightness: 0.95)
     static let peachBloom = Color(hue: 0.05, saturation: 0.5, brightness: 0.95)
     static let creamGlow = Color(hue: 0.08, saturation: 0.3, brightness: 0.95)
+}
+
+struct SettingsSelectorScreen: View {
+    let title: String
+    let options: [String]
+    let descriptions: [String]
+    let defaultDescription: String
+    let allowNilSelection: Bool
+    
+    let onSelect: ((Int?) -> Void)
+    
+    init(title: String, options: [String], descriptions: [String] = [], defaultDescription: String = "", allowNilSelection: Bool = false, selectedIndex: Int? = nil, onSelect: @escaping ((Int?) -> Void) = {_ in}) {
+        self.title = title
+        self.options = options
+        self.descriptions = descriptions
+        self.defaultDescription = defaultDescription
+        self.allowNilSelection = allowNilSelection
+        self.selectedIndex = selectedIndex
+        self.onSelect = onSelect
+    }
+    
+    @State var selectedIndex: Int? = nil
+    
+    
+    var body: some View {
+        return Form {
+                Section(footer: Text(getDescription())) {
+                    List {
+                        ForEach(0..<options.count) { index in
+                            HStack {
+                                Text(options[index])
+                                Spacer()
+                                if selectedIndex == index {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                            .contentShape(Rectangle()) // делаем всю строку кликабельной
+                            .onTapGesture {
+                                if index == selectedIndex && allowNilSelection {
+                                    selectedIndex = nil
+                                } else {
+                                    selectedIndex = index
+                                }
+                                onSelect(selectedIndex)
+                            }
+                        }
+                    }
+                    .navigationBarTitle(Text(title), displayMode: .inline)
+                }
+            }
+    }
+    
+    func getDescription() -> String {
+        if selectedIndex == nil {
+            return defaultDescription
+        } else if selectedIndex! > descriptions.count {
+            return defaultDescription
+        }
+        return descriptions[selectedIndex!]
+    }
+}
+
+
+
+#Preview {
+    SettingsSelectorScreen(title: "Settings",
+                           options: ["Разрешить", "Спрашивать", "Запретить"],
+                           descriptions: ["Будет разрешено", "Будет запрещено", "Не будет запрещено"],
+                           defaultDescription: "срать",
+                           allowNilSelection: true,
+                           onSelect: {index in print("Selected: \(index)")})
 }
