@@ -98,7 +98,7 @@ struct SettingsScreen: View {
                             Spacer()
                             if systemName != nil {
                                 Image(systemName: systemName!)
-                                    .font(.system(size: smallerIcon ? 30 : 40))
+                                    .font(.system(size: smallerIcon ? 35 : 40))
                                     .foregroundColor(.white)
                                     .frame(width: 60, height: 60)
                                     .background(
@@ -140,13 +140,15 @@ struct SettingsRow: View {
     let color: Color?
     let smallerIcon: Bool
     let imageName: String?
+    let selectedValue: String?
     
-    init(title: String, systemName: String? = nil, color: Color? = nil, smallerIcon: Bool = false, imageName: String? = nil) {
+    init(title: String, systemName: String? = nil, color: Color? = nil, smallerIcon: Bool = false, imageName: String? = nil, selectedValue: String? = nil) {
         self.title = title
         self.systemName = systemName
         self.color = color
         self.smallerIcon = smallerIcon
         self.imageName = imageName
+        self.selectedValue = selectedValue
     }
     
     var body: some View {
@@ -157,6 +159,12 @@ struct SettingsRow: View {
                 SettingsImageIcon(name: imageName!)
             }
             Text(title)
+            
+            if selectedValue != nil {
+                Spacer()
+                Text(selectedValue!)
+                    .foregroundColor(.gray)
+            }
         }
     }
 }
@@ -193,6 +201,7 @@ struct SettingsImageIcon: View {
             .resizable()
             .scaledToFit()
             .frame(width: 29, height: 29)
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .background(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
             )

@@ -32,50 +32,48 @@ struct NewSGProView: View {
             Form {
                 Section(header: Text("Основные")) {
                     NavigationLink(destination: Text("Accounts Backup")) {
-                        settingsRow(title: "Резервное копирование",
-                                    systemName: "key.fill",
+                        SettingsRow(title: "Резервное копирование",
+                                    systemName: "archivebox.fill",
                                     color: .gray)
                     }
                     
                     NavigationLink(destination: Text("Messages Filter")) {
-                        settingsRow(title: "Фильтр сообщений",
+                        SettingsRow(title: "Фильтр сообщений",
                                     systemName: "nosign",
                                     color: .red)
                     }
                     
                     Toggle(isOn: Binding(get: {true}, set: {_ in})) {
-                        HStack(spacing: 15) {
-                            SettingsIcon(systemName: "textformat",  background: .blue)
-                            Text("Панель форматирования")
-                        }
+                        SettingsRow(title: "Панель форматирования",
+                                    systemName: "textformat",
+                                    color: .blue)
                     }
                 }
                 
                 Section(header: Text("Уведомления")) {
                     NavigationLink(destination: Text("Закрепленные сообщения")) {
-                        settingsRow(title: "Закрепленные сообщения",
-                                    systemName: "pin.fill",
+                        SettingsRow(title: "Закрепленные сообщения",
+                                    systemName: "pin.slash.fill",
                                     color: .orange)
                     }
                     
                     NavigationLink(destination: Text("Mentions and replies")) {
-                        settingsRow(title: "Упоминания и ответы",
-                                    systemName: "arrowshape.turn.up.left.fill",
-                                    color: .purple)
+                        SettingsRow(title: "Упоминания и ответы",
+                                    systemName: "at",
+                                    color: .purple,
+                                    smallerIcon: false)
                     }
                 }
                 
                 Section(header: Text("Оформление")) {
                     NavigationLink(destination: Text("App Icons")) {
-                        settingsRow(title: "Иконка приложения",
-                                    systemName: "app.fill",
-                                    color: .pink)
+                        SettingsRow(title: "Иконка приложения",
+                                    imageName: "AppIcon")
                     }
                     
                     NavigationLink(destination: Text("App Badges")) {
-                        settingsRow(title: "Бэйдж приложения",
-                                    systemName: "app.dashed",
-                                    color: .gray)
+                        SettingsRow(title: "Бэйдж приложения",
+                                    imageName: "AppBadge")
                     }
                 }
             }
@@ -98,6 +96,7 @@ struct NewSGProView: View {
 #Preview {
     NavigationView {
         NewSGProView()
+            .navigationBarTitle(Text(" ."), displayMode: .inline)
     }
 //    NavigationView {
 //        NavigationLink {

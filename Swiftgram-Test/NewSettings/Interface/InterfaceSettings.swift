@@ -11,8 +11,8 @@ import Foundation
 struct InterfaceSettingsView: View {    
     var body: some View {
         SettingsScreen(title: "Интерфейс",
-                       description: "Измените свое восприятие Swiftgram, точечно изменяя интерфейс приложения.",
-                       systemName: "square.grid.2x2",
+                       description: "Изменяйте различные элементы интерфейса Swiftgram, например экраны, или папки с чатами.",
+                       systemName: "square.3.stack.3d",
                        color: .purple,
                        content: content as! AnyView)
     }
@@ -22,17 +22,19 @@ struct InterfaceSettingsView: View {
             NavigationLink {
                 StoriesSettingsView()
             } label: {
-                SettingsRow(title: "Истории", systemName: "circle.dashed.inset.fill", color: .orange)
+                SettingsRow(title: "Экраны", systemName: "rectangle.stack.fill", color: .blue, smallerIcon: true)
             }
+            
             NavigationLink {
-                ProfilesSettingsView()
+                StoriesSettingsView()
             } label: {
-                SettingsRow(title: "Профили", systemName: "person.crop.circle", color: .coralBreeze)
+                SettingsRow(title: "Папки с чатами", systemName: "folder.fill", color: .indigoMist, smallerIcon: true)
             }
+            
             NavigationLink {
-                GesturesSettingsView()
+                StoriesSettingsView()
             } label: {
-                SettingsRow(title: "Жесты", systemName: "hand.point.up.fill", color: .blue)
+                SettingsRow(title: "Список чатов", systemName: "message.fill", color: .green, smallerIcon: false)
             }
         }
     }

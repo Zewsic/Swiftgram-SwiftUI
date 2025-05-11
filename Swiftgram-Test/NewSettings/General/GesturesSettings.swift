@@ -35,7 +35,7 @@ struct GesturesSettingsView: View {
     
     var body: some View {
         SettingsScreen(title: "Жесты",
-                       description: "Настройте отображение элементов профиля пользователей.",
+                       description: "Сделайте использование Swiftgram еще более удобным с жестами!",
                        systemName: "hand.point.up.fill",
                        color: .blue,
                        content: content as! AnyView)

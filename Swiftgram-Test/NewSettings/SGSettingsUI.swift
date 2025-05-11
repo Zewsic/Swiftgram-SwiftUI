@@ -29,9 +29,9 @@ struct NewSettingsView: View {
                                     color: .blue)
                     }
                     
-                    NavigationLink(destination: Text("Chats")) {
+                    NavigationLink(destination: InterfaceSettingsView()) {
                         SettingsRow(title: "Интерфейс",
-                                    systemName: "square.grid.2x2",
+                                    systemName: "square.3.stack.3d",
                                     color: .purple)
                     }
                     
@@ -65,6 +65,7 @@ struct NewSettingsView: View {
 
     NavigationView {
         NewSettingsView()
+            .navigationBarTitle(Text(" ."), displayMode: .inline)
     }
 }
 
